@@ -1,0 +1,4 @@
+name: OutcastsFinale
+version: '${project.version}'
+main: dev.acronical.outcastsfinale.OutcastsFinale
+api-version: '1.20'
