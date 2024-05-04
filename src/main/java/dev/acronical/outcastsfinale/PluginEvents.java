@@ -26,7 +26,7 @@ public class PluginEvents implements Listener {
 
     // ! Wymsicaal's Rock Logic
     @EventHandler
-    public void spikeyRockThrow(PlayerInteractEvent e) {
+    public void spikyRockThrow(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         World world = player.getWorld();
         Player[] players = world.getPlayers().toArray(new Player[0]);
