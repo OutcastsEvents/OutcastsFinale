@@ -17,7 +17,7 @@ public class WoocieHorse {
     public static ItemStack woocieHorse;
 
     public static void createWoocieHorse() {
-        ItemStack item = new ItemStack(Material.DIAMOND_BOOTS, 1);
+        ItemStack item = new ItemStack(Material.LEATHER_HORSE_ARMOR, 1);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Woocie's Horse");
         List<String> lore = new ArrayList<>();

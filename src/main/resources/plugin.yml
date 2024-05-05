@@ -2,3 +2,15 @@ name: OutcastsFinale
 version: '${project.version}'
 main: dev.acronical.outcastsfinale.OutcastsFinale
 api-version: '1.20'
+author: Acronical
+description: The plugin for the Outcasts' Events Finale.
+website: https://acronical.is-a.dev/projects
+commands:
+  pvp:
+    description: Enable or disable PVP.
+    usage: /pvp <on/off>
+    permission: outcastsfinale.pvptoggle
+permissions:
+    outcastsfinale.pvptoggle:
+        description: Allows the player to toggle PVP.
+        default: op

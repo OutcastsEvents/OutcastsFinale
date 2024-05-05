@@ -9,6 +9,8 @@ public final class OutcastsFinale extends JavaPlugin {
     public void onEnable() {
         ItemManager.init();
         getServer().getPluginManager().registerEvents(new PluginEvents(), this);
+        getCommand("pvp").setExecutor(new PluginCommands());
+        getCommand("pvp").setTabCompleter(new PluginCommands());
         getServer().getConsoleSender().sendMessage("[Outcasts Finale] Plugin enabled!");
     }
 

@@ -12,28 +12,26 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AstelinaBarrel {
+public class PheabeeBeehive {
 
-    public static ItemStack astelinaBarrel;
+    public static ItemStack pheabeeBeehive;
 
-    public static void createAstelinaBarrel() {
-        ItemStack item = new ItemStack(Material.BARREL, 3);
+    public static void createPheabeeBeehive() {
+        ItemStack item = new ItemStack(Material.BEEHIVE, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Silly Barrel");
+        meta.setDisplayName("Pheabee's Beehive");
         List<String> lore = new ArrayList<>();
-        lore.add("Right click to shoot TNT!");
+        lore.add("Summons bees to help attack your enemies!");
         meta.setLore(lore);
-        meta.addEnchant(Enchantment.LUCK, 1, false);
+        meta.addEnchant(Enchantment.LUCK, 3, false);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         item.setItemMeta(meta);
-        astelinaBarrel = item;
+        pheabeeBeehive = item;
 
-        ShapedRecipe sr = new ShapedRecipe(NamespacedKey.minecraft("astelinabarrel"), item);
-        sr.shape("BTB", "TDT" ,"BTB");
-        sr.setIngredient('B', Material.BARREL);
-        sr.setIngredient('T', Material.TNT);
-        sr.setIngredient('D', Material.DIAMOND);
+        ShapedRecipe sr = new ShapedRecipe(NamespacedKey.minecraft("pheabeebeehive"), item);
+        sr.shape("LLL", "HHH", "LLL");
+        sr.setIngredient('L', Material.OAK_LOG);
+        sr.setIngredient('H', Material.HONEYCOMB);
         Bukkit.getServer().addRecipe(sr);
     }
-
 }

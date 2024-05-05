@@ -29,11 +29,10 @@ public class RazmooseMeal {
         razmooseMeal = item;
 
         ShapedRecipe sr = new ShapedRecipe(NamespacedKey.minecraft("razmoosemeal"), item);
-        sr.shape("LCL", "SDS", "LCL");
-        sr.setIngredient('L', Material.LEATHER);
-        sr.setIngredient('D', Material.DIAMOND);
-        sr.setIngredient('S', Material.SUGAR);
-        sr.setIngredient('C', Material.COAL_BLOCK);
+        sr.shape(" B ", "CSC", " B ");
+        sr.setIngredient('B', Material.BREAD);
+        sr.setIngredient('S', Material.SUGAR_CANE);
+        sr.setIngredient('C', Material.COOKED_CHICKEN);
         Bukkit.getServer().addRecipe(sr);
     }
 
