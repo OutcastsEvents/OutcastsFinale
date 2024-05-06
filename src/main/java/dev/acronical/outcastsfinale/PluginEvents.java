@@ -1,28 +1,45 @@
 package dev.acronical.outcastsfinale;
 
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import dev.acronical.outcastsfinale.items.impl.*;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
-import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.logging.Logger;
 
 public class PluginEvents implements Listener {
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(PluginEvents.class);
     Logger logger = Logger.getLogger("OutcastsFinale");
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        Player player = e.getPlayer();
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("astelinabarrel"))) player.discoverRecipe(NamespacedKey.minecraft("astelinabarrel"));
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("crowleggings"))) player.discoverRecipe(NamespacedKey.minecraft("crowleggings"));
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("ferveeghast"))) player.discoverRecipe(NamespacedKey.minecraft("ferveeghast"));
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("pheabeebeehive"))) player.discoverRecipe(NamespacedKey.minecraft("pheabeebeehive"));
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("razmoosemeal"))) player.discoverRecipe(NamespacedKey.minecraft("razmoosemeal"));
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("chiefsocks"))) player.discoverRecipe(NamespacedKey.minecraft("chiefsocks"));
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("tingznecklace"))) player.discoverRecipe(NamespacedKey.minecraft("tingznecklace"));
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("wenzosword"))) player.discoverRecipe(NamespacedKey.minecraft("wenzosword"));
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("woociehorse"))) player.discoverRecipe(NamespacedKey.minecraft("woociehorse"));
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("wymsicaalrock"))) player.discoverRecipe(NamespacedKey.minecraft("wymsicaalrock"));
+        if (!player.getDiscoveredRecipes().contains(NamespacedKey.minecraft("yrrahcrown"))) player.discoverRecipe(NamespacedKey.minecraft("yrrahcrown"));
+    }
 
     // ! Chief's Socks Logic
     public BukkitTask squidSocksTask = Bukkit.getServer().getScheduler().runTaskTimer(OutcastsFinale.getPlugin(OutcastsFinale.class), () -> {
@@ -52,7 +69,6 @@ public class PluginEvents implements Listener {
         if (!e.getAction().isRightClick()) return;
         if (player.getInventory().getItemInMainHand().isEmpty()) return;
         if (!Objects.equals(player.getInventory().getItemInMainHand().getLore(), WymsicaalRock.wymsicaalRock.getLore())) return;
-        if (!player.getTargetBlock(null, 5).getType().equals(Material.AIR)) return;
         e.setCancelled(true);
         player.getInventory().removeItem(WymsicaalRock.wymsicaalRock);
         Entity spikyRock = world.spawnFallingBlock(playerLocation, Material.STONE, (byte) 0);
@@ -89,7 +105,7 @@ public class PluginEvents implements Listener {
         player.getInventory().removeItem(RazmooseMeal.razmooseMeal);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 40 , 254));
         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 4));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 400, 0));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 300, 0));
     }
 
     // ! Tingz's Necklace Logic
@@ -118,6 +134,7 @@ public class PluginEvents implements Listener {
     @EventHandler
     public void onGhastSpawn(PlayerInteractEvent e) {
         Player player = e.getPlayer();
+        Team team = player.getScoreboard().getPlayerTeam(player);
         if (!e.getAction().isRightClick()) return;
         if (player.getInventory().getItemInMainHand().isEmpty()) return;
         if (!Objects.equals(player.getInventory().getItemInMainHand().getLore(), FerveeGhast.ferveeGhast.getLore())) return;
@@ -125,13 +142,39 @@ public class PluginEvents implements Listener {
         player.getInventory().removeItem(FerveeGhast.ferveeGhast);
         Ghast ghast = (Ghast) player.getWorld().spawnEntity(player.getLocation(), EntityType.GHAST);
         ghast.setCustomName(player.getName() + "'s Ghast");
+        ghast.setGlowing(true);
+        ghast.setAI(false);
+        ghast.addScoreboardTag(player.getName().toLowerCase());
         for (Player target : Bukkit.getOnlinePlayers()) {
-            if (target.getGameMode() == GameMode.SURVIVAL && target != player && target.getScoreboard().getPlayerTeam(target) != player.getScoreboard().getPlayerTeam(player)) {
+            if (target.getGameMode() == GameMode.SURVIVAL && target != player && !team.getEntries().contains(target.getName())) {
+                if (target.getName().equals(player.getName()) || team.getEntries().contains(target.getName())) continue;
                 ghast.setTarget(target);
                 break;
             }
         }
     }
+
+    public BukkitTask ghastAttack = Bukkit.getServer().getScheduler().runTaskTimer(OutcastsFinale.getPlugin(OutcastsFinale.class), () -> {
+        for (World world : Bukkit.getWorlds()) {
+            for (Entity entity : world.getEntities()) {
+                if (entity instanceof Ghast ghast) {
+                    if (!ghast.isDead() && ghast.getCustomName() != null) {
+                        if (ghast.getCustomName().contains("'s Ghast")) {
+                            Player spawner = Bukkit.getPlayer(ghast.getScoreboardTags().iterator().next());
+                            Team team = spawner.getScoreboard().getPlayerTeam(spawner);
+                            for (Player player : Bukkit.getOnlinePlayers()) {
+                                if (!(player.getName().toLowerCase().equals(spawner.getName().toLowerCase()) || team.getEntries().contains(player.getName())) && player.getGameMode().equals(GameMode.SURVIVAL) && !player.isDead()) {
+                                    ghast.setAI(true);
+                                    ghast.setTarget(player);
+                                    ghast.setVelocity(player.getLocation().toVector().subtract(ghast.getLocation().toVector()).normalize().multiply(0.25));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, 0, 20);
 
     public BukkitTask ghastTimeout = Bukkit.getServer().getScheduler().runTaskTimer(OutcastsFinale.getPlugin(OutcastsFinale.class), () -> {
         for (World world : Bukkit.getWorlds()) {
@@ -160,12 +203,13 @@ public class PluginEvents implements Listener {
         player.getInventory().removeItem(PheabeeBeehive.pheabeeBeehive);
         Location location = player.getLocation();
         World world = player.getWorld();
+        Team team = player.getScoreboard().getPlayerTeam(player);
         for (int i = 0; i < 5; i++) {
             Bee bee = (Bee) world.spawnEntity(location, EntityType.BEE);
             bee.setAnger(100);
             bee.setCustomName(player.getName() + "'s Bee");
             for (Player target : Bukkit.getOnlinePlayers()) {
-                if (target.getGameMode() == GameMode.SURVIVAL && target != player && target.getScoreboard().getPlayerTeam(target) != player.getScoreboard().getPlayerTeam(player)) {
+                if (target.getGameMode() == GameMode.SURVIVAL && target != player && !team.getEntries().contains(target)) {
                     bee.setTarget(target);
                     break;
                 }
@@ -266,6 +310,13 @@ public class PluginEvents implements Listener {
     }
 
     @EventHandler
+    public void onAnvilCombine(PrepareAnvilEvent e) {
+        if (e.getResult() == null) return;
+        if (!Objects.equals(e.getResult().getItemMeta().getLore(), WenzoSword.wenzoSword.getLore())) return;
+        e.setResult(null);
+    }
+
+    @EventHandler
     public void onFlowerPickup(PlayerAttemptPickupItemEvent e) {
         if (!e.getItem().getScoreboardTags().contains("wenzoFlower")) return;
         e.setCancelled(true);
@@ -280,14 +331,11 @@ public class PluginEvents implements Listener {
                             Player spawner = Bukkit.getPlayer(frog.getScoreboardTags().iterator().next());
                             Team team = spawner.getScoreboard().getPlayerTeam(spawner);
                             for (Player player : Bukkit.getOnlinePlayers()) {
-                                if (!player.getName().equals(frog.getScoreboardTags().iterator().next()) && player.getGameMode().equals(GameMode.SURVIVAL)) {
-                                    if (player.getScoreboard().getPlayerTeam(player) != team) {
-                                        frog.setTarget(player);
-                                        frog.setVelocity(player.getLocation().toVector().subtract(frog.getLocation().toVector()).normalize().multiply(0.5));
-                                        if (frog.getLocation().distance(player.getLocation()) < 3) {
-                                            player.damage(1, frog);
-                                        }
-                                        break;
+                                if (!(player.getName().toLowerCase().equals(frog.getScoreboardTags().iterator().next()) || team.getEntries().contains(player.getName())) && player.getGameMode().equals(GameMode.SURVIVAL)) {
+                                    frog.setTarget(player);
+                                    frog.setVelocity(player.getLocation().toVector().subtract(frog.getLocation().toVector()).normalize().multiply(0.5));
+                                    if (frog.getLocation().distance(player.getLocation()) < 3) {
+                                        player.damage(1, frog);
                                     }
                                 }
                             }
@@ -343,7 +391,7 @@ public class PluginEvents implements Listener {
         for (int i = 0; i < 3; i++) {
             TNTPrimed tnt = (TNTPrimed) world.spawnEntity(location, EntityType.PRIMED_TNT);
             tnt.setVelocity(new Vector(direction.getX() + Math.random() * 0.5, direction.getY() + Math.random() * 0.5, direction.getZ() + Math.random() * 0.5));
-            tnt.setFuseTicks(40);
+            tnt.setFuseTicks(120);
             tnt.setCustomNameVisible(true);
             tnt.setCustomName(player.getName() + "'s TNT");
             tnt.setGlowing(true);
@@ -354,11 +402,40 @@ public class PluginEvents implements Listener {
     @EventHandler
     public void onTNTExplode(EntityDamageByEntityEvent e) {
         if (!(e.getDamager() instanceof TNTPrimed tnt)) return;
-        if (!tnt.getCustomName().contains("'s TNT")) return;
+        if (!Objects.requireNonNull(tnt.getCustomName()).contains("'s TNT")) return;
         if (!(e.getEntity() instanceof Player player)) return;
         Team team = Objects.requireNonNull(Bukkit.getPlayer(tnt.getScoreboardTags().iterator().next())).getScoreboard().getPlayerTeam(Objects.requireNonNull(Bukkit.getPlayer(tnt.getScoreboardTags().iterator().next())));
         if (player.getScoreboard().getPlayerTeam(player) == team || player.getName().toLowerCase().equals(tnt.getScoreboardTags().iterator().next())) {
             e.setCancelled(true);
         }
     }
+
+    // ! Yrrah's Crown
+    @EventHandler
+    public void onPlayerDeath(EntityDamageEvent e) {
+        Player player = (Player) e.getEntity();
+        if (player.getInventory().getHelmet() == null) return;
+        if (!Objects.equals(player.getInventory().getHelmet().getLore(), YrrahCrown.yrrahCrown.getLore())) return;
+        player.addScoreboardTag("yrrahCrown");
+        if (player.getHealth() <= 1) {
+            e.setCancelled(true);
+            player.setHealth(5);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 0));
+            player.getInventory().removeItem(YrrahCrown.yrrahCrown);
+        }
+    }
+
+    public BukkitTask crownCheck = Bukkit.getServer().getScheduler().runTaskTimer(OutcastsFinale.getPlugin(OutcastsFinale.class), () -> {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getInventory().getHelmet().isEmpty()) return;
+            if (player.getScoreboardTags().contains("yrrahCrown")) {
+                if (player.getInventory().getHelmet().getLore().equals(YrrahCrown.yrrahCrown.getLore())) {
+                    player.getInventory().setHelmet(null);
+                    player.sendMessage("§lYou can only use Yrrah's Crown once per life.");
+                    player.getInventory().addItem(YrrahCrown.yrrahCrown);
+                }
+            }
+        }
+    }, 0, 20);
 }

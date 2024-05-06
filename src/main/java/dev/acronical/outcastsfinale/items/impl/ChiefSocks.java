@@ -27,7 +27,7 @@ public class ChiefSocks {
         item.setItemMeta(meta);
         squidSocks = item;
 
-        ShapedRecipe sr = new ShapedRecipe(NamespacedKey.minecraft("squidsocks"), item);
+        ShapedRecipe sr = new ShapedRecipe(NamespacedKey.minecraft("chiefsocks"), item);
         sr.shape("D D", "BWB");
         sr.setIngredient('B', Material.DIAMOND_BLOCK);
         sr.setIngredient('D', Material.DIAMOND);

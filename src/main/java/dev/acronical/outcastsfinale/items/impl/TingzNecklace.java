@@ -23,8 +23,7 @@ public class TingzNecklace {
         List<String> lore = new ArrayList<>();
         lore.add("Gives you resistance 1, and speed 1 for 10 seconds on a kill.");
         meta.setLore(lore);
-        meta.addEnchant(Enchantment.LUCK, 1, false);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, false);
         item.setItemMeta(meta);
         tingzNecklace = item;
 

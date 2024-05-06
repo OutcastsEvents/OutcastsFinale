@@ -21,7 +21,7 @@ public class FerveeGhast {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("§9Fervee's Ghast");
         List<String> lore = new ArrayList<>();
-        lore.add("Spawns a ridable Ghast for you to use!");
+        lore.add("Spawns a Ghast to support you!");
         meta.setLore(lore);
         meta.addEnchant(Enchantment.LUCK, 1, false);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

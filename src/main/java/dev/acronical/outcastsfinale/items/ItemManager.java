@@ -10,6 +10,7 @@ import static dev.acronical.outcastsfinale.items.impl.TingzNecklace.createTingzN
 import static dev.acronical.outcastsfinale.items.impl.WenzoSword.createWenzoSword;
 import static dev.acronical.outcastsfinale.items.impl.WoocieHorse.createWoocieHorse;
 import static dev.acronical.outcastsfinale.items.impl.WymsicaalRock.createWymsicaalRock;
+import static dev.acronical.outcastsfinale.items.impl.YrrahCrown.createYrrahCrown;
 
 public class ItemManager {
 
@@ -24,6 +25,7 @@ public class ItemManager {
         createPheabeeBeehive();
         createCrowLeggings();
         createWenzoSword();
+        createYrrahCrown();
     }
 
 }
