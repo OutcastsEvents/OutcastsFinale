@@ -19,7 +19,7 @@ public class FerveeGhast {
     public static void createFerveeGhast() {
         ItemStack item = new ItemStack(Material.GHAST_SPAWN_EGG, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Fervee's Ghast");
+        meta.setDisplayName("§9Fervee's Ghast");
         List<String> lore = new ArrayList<>();
         lore.add("Spawns a ridable Ghast for you to use!");
         meta.setLore(lore);

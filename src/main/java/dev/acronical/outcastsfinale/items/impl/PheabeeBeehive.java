@@ -19,7 +19,7 @@ public class PheabeeBeehive {
     public static void createPheabeeBeehive() {
         ItemStack item = new ItemStack(Material.BEEHIVE, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Pheabee's Beehive");
+        meta.setDisplayName("§ePheabee's Beehive");
         List<String> lore = new ArrayList<>();
         lore.add("Summons bees to help attack your enemies!");
         meta.setLore(lore);

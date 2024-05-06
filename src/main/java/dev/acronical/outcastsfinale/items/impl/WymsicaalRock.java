@@ -21,7 +21,7 @@ public class WymsicaalRock {
     public static void createWymsicaalRock() {
         ItemStack item = new ItemStack(Material.STONE, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Wymsicaal's Spiky Rock");
+        meta.setDisplayName("§5Wymsicaal's Spiky Rock");
         List<String> lore = new ArrayList<>();
         lore.add("Throw me to deal damage.");
         meta.setLore(lore);

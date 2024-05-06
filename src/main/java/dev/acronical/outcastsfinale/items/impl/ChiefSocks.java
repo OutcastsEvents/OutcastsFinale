@@ -18,7 +18,7 @@ public class ChiefSocks {
     public static void createSquidSocks() {
         ItemStack item = new ItemStack(Material.DIAMOND_BOOTS, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Squid Socks");
+        meta.setDisplayName("Chief's Squid Socks");
         List<String> lore = new ArrayList<>();
         lore.add("Gives you protection 3 and dolphin's grace, at a cost.");
         meta.setLore(lore);
