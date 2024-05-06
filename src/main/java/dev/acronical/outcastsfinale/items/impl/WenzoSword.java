@@ -20,7 +20,7 @@ public class WenzoSword {
     public static void createWenzoSword() {
         ItemStack item = new ItemStack(Material.IRON_SWORD, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("§cWenzo's Sword");
+        meta.setDisplayName("§cWenzo's Blade");
         List<String> lore = new ArrayList<>();
         lore.add("A sword that has some interesting power.");
         meta.setLore(lore);
