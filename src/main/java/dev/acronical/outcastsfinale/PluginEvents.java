@@ -48,7 +48,7 @@ public class PluginEvents implements Listener {
             if (!Objects.equals(player.getInventory().getBoots().getLore(), ChiefSocks.squidSocks.getLore())) continue;
             player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 30, 1));
         }
-    }, 0, 20);
+    }, 0, 1);
 
     // ! Woocie's Horse Logic
     public BukkitTask woocieHorseTask = Bukkit.getServer().getScheduler().runTaskTimer(OutcastsFinale.getPlugin(OutcastsFinale.class), () -> {
@@ -57,7 +57,7 @@ public class PluginEvents implements Listener {
             if (!Objects.equals(player.getInventory().getItemInMainHand().getLore(), WoocieHorse.woocieHorse.getLore())) continue;
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30, 1));
         }
-    }, 0, 20);
+    }, 0, 1);
 
     // ! Wymsicaal's Rock Logic
     @EventHandler
@@ -79,6 +79,27 @@ public class PluginEvents implements Listener {
         spikyRock.addScoreboardTag(player.getName().toLowerCase());
     }
 
+    public BukkitTask spikyRockCollideTask = Bukkit.getServer().getScheduler().runTaskTimer(OutcastsFinale.getPlugin(OutcastsFinale.class), () -> {
+        for (World world : Bukkit.getWorlds()) {
+            for (Entity entity : world.getEntities()) {
+                if (entity instanceof FallingBlock spikyRock) {
+                    if (!spikyRock.isDead() && spikyRock.getCustomName() != null) {
+                        if (spikyRock.getCustomName().contains("'s Spiky Rock")) {
+                            for (Entity nearbyEntity : spikyRock.getNearbyEntities(0.1, 0.1, 0.1)) {
+                                if (spikyRock.getTicksLived() < 2) continue;
+                                if (nearbyEntity instanceof Player player) {
+                                    if (player.getName().toLowerCase().equals(spikyRock.getScoreboardTags().iterator().next()) || !player.getGameMode().equals(GameMode.SURVIVAL) || player.isDead()) continue;
+                                    player.damage(5);
+                                    spikyRock.remove();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, 0, 1);
+
     @EventHandler
     public void onSpikyRockLand(EntityChangeBlockEvent e) {
         if (!e.getEntityType().equals(EntityType.FALLING_BLOCK)) return;
@@ -89,7 +110,7 @@ public class PluginEvents implements Listener {
         Team team = Bukkit.getPlayer(entity.getScoreboardTags().iterator().next()).getScoreboard().getPlayerTeam(Objects.requireNonNull(Bukkit.getPlayer(entity.getScoreboardTags().iterator().next())));
         for (Entity nearbyEntity : entity.getNearbyEntities(3, 3, 3)) {
             if (nearbyEntity instanceof Player player) {
-                if (player.getScoreboard().getPlayerTeam(player).equals(team) || entity.getScoreboardTags().contains(player.getName().toLowerCase())) continue;
+                if (player.getScoreboard().getPlayerTeam(player).equals(team) || entity.getScoreboardTags().contains(player.getName().toLowerCase()) || !player.getGameMode().equals(GameMode.SURVIVAL) || player.isDead()) continue;
                 player.damage(5);
             }
         }
@@ -174,7 +195,7 @@ public class PluginEvents implements Listener {
                 }
             }
         }
-    }, 0, 20);
+    }, 0, 1);
 
     public BukkitTask ghastTimeout = Bukkit.getServer().getScheduler().runTaskTimer(OutcastsFinale.getPlugin(OutcastsFinale.class), () -> {
         for (World world : Bukkit.getWorlds()) {
@@ -245,13 +266,12 @@ public class PluginEvents implements Listener {
         Vector damagerDirection = damagerLocation.getDirection();
         for (int i = 0; i < 3; i++) {
             Entity clyde = world.spawnEntity(damagerLocation, EntityType.FROG);
-            clyde.setCustomName("§l§6Clyde");
+            clyde.setCustomName(damager.getName() + "'s §l§6Clyde");
             clyde.setCustomNameVisible(true);
             clyde.addScoreboardTag(damager.getName().toLowerCase());
             clyde.setGlowing(true);
         }
         for (int i = 0; i < 8; i++) {
-            // Shoot the flower in 8 directions creating a circle around the player
             Vector shootDirection = new Vector(damagerDirection.getX() + Math.cos(i * Math.PI / 4), damagerDirection.getY(), damagerDirection.getZ() + Math.sin(i * Math.PI / 4)).normalize().multiply(0.75);
             switch (i) {
                 case 0:
@@ -402,6 +422,7 @@ public class PluginEvents implements Listener {
     @EventHandler
     public void onTNTExplode(EntityDamageByEntityEvent e) {
         if (!(e.getDamager() instanceof TNTPrimed tnt)) return;
+        if (tnt.getCustomName() == null) return;
         if (!Objects.requireNonNull(tnt.getCustomName()).contains("'s TNT")) return;
         if (!(e.getEntity() instanceof Player player)) return;
         Team team = Objects.requireNonNull(Bukkit.getPlayer(tnt.getScoreboardTags().iterator().next())).getScoreboard().getPlayerTeam(Objects.requireNonNull(Bukkit.getPlayer(tnt.getScoreboardTags().iterator().next())));
@@ -412,23 +433,25 @@ public class PluginEvents implements Listener {
 
     // ! Yrrah's Crown
     @EventHandler
-    public void onPlayerDeath(EntityDamageEvent e) {
-        Player player = (Player) e.getEntity();
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        Player player = e.getPlayer();
         if (player.getInventory().getHelmet() == null) return;
         if (!Objects.equals(player.getInventory().getHelmet().getLore(), YrrahCrown.yrrahCrown.getLore())) return;
+        e.setCancelled(true);
+        player.getInventory().setHelmet(null);
         player.addScoreboardTag("yrrahCrown");
-        if (player.getHealth() <= 1) {
-            e.setCancelled(true);
-            player.setHealth(5);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 0));
-            player.getInventory().removeItem(YrrahCrown.yrrahCrown);
-        }
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.setSaturation(20);
+        Particle particle = Particle.TOTEM;
+        player.spawnParticle(particle, player.getLocation(), player.getLocation().getDirection().getBlockX(), player.getLocation().getDirection().getBlockY(), player.getLocation().getDirection().getBlockZ(), 100);
+        player.sendTitle("§l§6Saved!", "§lYou have been saved by Yrrah's Crown.", 10, 70, 20);
     }
 
     public BukkitTask crownCheck = Bukkit.getServer().getScheduler().runTaskTimer(OutcastsFinale.getPlugin(OutcastsFinale.class), () -> {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getInventory().getHelmet().isEmpty()) return;
+            if (player.getInventory().getHelmet() == null) continue;
+            if (Objects.requireNonNull(player.getInventory().getHelmet().getLore()).isEmpty()) return;
             if (player.getScoreboardTags().contains("yrrahCrown")) {
                 if (player.getInventory().getHelmet().getLore().equals(YrrahCrown.yrrahCrown.getLore())) {
                     player.getInventory().setHelmet(null);
@@ -437,5 +460,5 @@ public class PluginEvents implements Listener {
                 }
             }
         }
-    }, 0, 20);
+    }, 0, 1);
 }

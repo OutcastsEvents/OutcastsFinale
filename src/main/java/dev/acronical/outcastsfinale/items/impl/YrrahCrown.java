@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,12 +18,13 @@ public class YrrahCrown {
     public static void createYrrahCrown() {
         ItemStack item = new ItemStack(Material.GOLDEN_HELMET, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Yrrah's Crown");
+        meta.setDisplayName("§Yrrah's Crown");
         List<String> lore = new ArrayList<>();
-        lore.add("Will save you from death, once.");
+        lore.add("§lA valuble item that can §krevive you once.");
         meta.setLore(lore);
-        meta.addEnchant(Enchantment.LUCK, 1, false);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, false);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, false);
+        meta.addEnchant(Enchantment.DURABILITY, 3, false);
         item.setItemMeta(meta);
         yrrahCrown = item;
 

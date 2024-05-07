@@ -10,7 +10,16 @@ commands:
     description: Enable or disable PVP.
     usage: /pvp <on/off>
     permission: outcastsfinale.pvptoggle
+  crownreset:
+    description: Allows players to use the crown again.
+    usage: /crownreset
+    permission: outcastsfinale.crownreset
+    aliases:
+      - resetcrown
 permissions:
     outcastsfinale.pvptoggle:
         description: Allows the player to toggle PVP.
+        default: op
+    outcastsfinale.crownreset:
+        description: Allows the player to reset the crown.
         default: op

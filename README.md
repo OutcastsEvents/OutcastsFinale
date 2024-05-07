@@ -5,10 +5,13 @@ This is the final plugin for the Outcasts SMP Events that includes custom items 
 
 ## Commands
 - `/pvp <on/off>` - Toggles PvP on and off
+- `/crownreset <player/all>` - Allows the player(s) to use Yrrah's crown again
 
 ## Permissions
 - `outcastsfinale.*` - Gives access to all Outcasts Finale commands
 - `outcastsfinale.pvptoggle` - Allows the player to toggle PvP
+- `outcastsfinale.crownreset` - Allows the player to reset the crown
+<br>All permissions are given to OPs by default
 
 ## Installation
 1. Download the plugin from the [releases](https://www.github.com/OutcastsEvents/OutcastsFinale/releases/tags/Stable) page
