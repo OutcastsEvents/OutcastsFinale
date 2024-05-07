@@ -1,20 +1,16 @@
 package dev.acronical.outcastsfinale;
 
+import dev.acronical.outcastsfinale.items.impl.RazmooseMeal;
 import org.bukkit.Bukkit;
+import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PluginCommands implements CommandExecutor, TabCompleter {
-    private static final String[] COMMANDS = { "on", "off" };
+public class PluginCommands implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
@@ -66,7 +62,9 @@ public class PluginCommands implements CommandExecutor, TabCompleter {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (!player.getScoreboardTags().contains("yrrahCrown")) continue;
                     player.getScoreboardTags().remove("yrrahCrown");
+                    player.sendMessage("You can now use Yrrah's Crown again.");
                 }
+                commandSender.sendMessage("All players can now use Yrrah's Crown again.");
                 return true;
             }
             Player player = Bukkit.getPlayer(strings[0]);
@@ -79,21 +77,44 @@ public class PluginCommands implements CommandExecutor, TabCompleter {
                 return true;
             }
             player.getScoreboardTags().remove("yrrahCrown");
-            commandSender.sendMessage(player.getName() + " can now use the crown again.");
+            commandSender.sendMessage(player.getName() + " can now use Yrrah's Crown again.");
             player.sendMessage("Your crown has been reset.");
             return true;
         }
 
-        return false;
-    }
-
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {        //create new array
-        final List<String> completions = new ArrayList<>();
-        if (args[0].equalsIgnoreCase("pvp") && args.length == 1) {
-            StringUtil.copyPartialMatches(args[0], List.of(COMMANDS), completions);
-            return completions;
+        if (command.getName().equalsIgnoreCase("mealreset") && (commandSender.isOp() || commandSender.hasPermission("outcastsfinale.mealreset"))) {
+            if (strings.length == 0) {
+                commandSender.sendMessage("Usage: /mealreset <player>");
+                return true;
+            }
+            if (strings.length > 1) {
+                commandSender.sendMessage("Usage: /mealreset <player>");
+                return true;
+            }
+            if (strings[0].equalsIgnoreCase("all")) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getStatistic(Statistic.USE_ITEM, RazmooseMeal.razmooseMeal.getType()) == 0) continue;
+                    player.sendMessage("You can now use Razmoose's meal again.");
+                    player.setStatistic(Statistic.USE_ITEM, RazmooseMeal.razmooseMeal.getType(), 0);
+                }
+                commandSender.sendMessage("All players can now use Razmoose's meal again.");
+                return true;
+            }
+            Player player = Bukkit.getPlayer(strings[0]);
+            if (player == null) {
+                commandSender.sendMessage("Player not found.");
+                return true;
+            }
+            if (player.getStatistic(Statistic.USE_ITEM, RazmooseMeal.razmooseMeal.getType()) == 0) {
+                commandSender.sendMessage("Player has not used the meal.");
+                return true;
+            }
+            player.setStatistic(Statistic.USE_ITEM, RazmooseMeal.razmooseMeal.getType(), 0);
+            commandSender.sendMessage(player.getName() + " can now use Razmoose's meal again.");
+            player.sendMessage("Your meal has been reset.");
+            return true;
         }
-        return null;
+
+        return false;
     }
 }

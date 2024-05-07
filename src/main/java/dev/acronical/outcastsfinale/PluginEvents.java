@@ -1,6 +1,5 @@
 package dev.acronical.outcastsfinale;
 
-import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import dev.acronical.outcastsfinale.items.impl.*;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -87,9 +86,10 @@ public class PluginEvents implements Listener {
                         if (spikyRock.getCustomName().contains("'s Spiky Rock")) {
                             for (Entity nearbyEntity : spikyRock.getNearbyEntities(0.1, 0.1, 0.1)) {
                                 if (spikyRock.getTicksLived() < 2) continue;
+                                Player spawner = Bukkit.getPlayer(spikyRock.getScoreboardTags().iterator().next());
                                 if (nearbyEntity instanceof Player player) {
                                     if (player.getName().toLowerCase().equals(spikyRock.getScoreboardTags().iterator().next()) || !player.getGameMode().equals(GameMode.SURVIVAL) || player.isDead()) continue;
-                                    player.damage(5);
+                                    player.damage(5, spawner);
                                     spikyRock.remove();
                                 }
                             }
@@ -107,11 +107,12 @@ public class PluginEvents implements Listener {
         if (!Objects.requireNonNull(e.getEntity().getCustomName()).contains("'s Spiky Rock")) return;
         e.setCancelled(true);
         Entity entity = e.getEntity();
+        Player spawner = Bukkit.getPlayer(entity.getScoreboardTags().iterator().next());
         Team team = Bukkit.getPlayer(entity.getScoreboardTags().iterator().next()).getScoreboard().getPlayerTeam(Objects.requireNonNull(Bukkit.getPlayer(entity.getScoreboardTags().iterator().next())));
         for (Entity nearbyEntity : entity.getNearbyEntities(3, 3, 3)) {
             if (nearbyEntity instanceof Player player) {
                 if (player.getScoreboard().getPlayerTeam(player).equals(team) || entity.getScoreboardTags().contains(player.getName().toLowerCase()) || !player.getGameMode().equals(GameMode.SURVIVAL) || player.isDead()) continue;
-                player.damage(5);
+                player.damage(5, spawner);
             }
         }
     }
@@ -123,6 +124,12 @@ public class PluginEvents implements Listener {
         if (!e.getAction().isRightClick()) return;
         if (player.getInventory().getItemInMainHand().isEmpty()) return;
         if (!Objects.equals(player.getInventory().getItemInMainHand().getLore(), RazmooseMeal.razmooseMeal.getLore())) return;
+        if (player.getStatistic(Statistic.USE_ITEM, RazmooseMeal.razmooseMeal.getType()) == 5) {
+            player.sendMessage("§lYou have reached the maximum uses of Razmoose's Meal.");
+            return;
+        } else {
+            player.incrementStatistic(Statistic.USE_ITEM, RazmooseMeal.razmooseMeal.getType());
+        }
         player.getInventory().removeItem(RazmooseMeal.razmooseMeal);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 40 , 254));
         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 4));
@@ -166,6 +173,7 @@ public class PluginEvents implements Listener {
         ghast.setGlowing(true);
         ghast.setAI(false);
         ghast.addScoreboardTag(player.getName().toLowerCase());
+        ghast.addPassenger(player);
         for (Player target : Bukkit.getOnlinePlayers()) {
             if (target.getGameMode() == GameMode.SURVIVAL && target != player && !team.getEntries().contains(target.getName())) {
                 if (target.getName().equals(player.getName()) || team.getEntries().contains(target.getName())) continue;

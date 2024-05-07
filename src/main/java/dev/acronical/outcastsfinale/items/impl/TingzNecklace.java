@@ -19,7 +19,7 @@ public class TingzNecklace {
     public static void createTingzNecklace() {
         ItemStack item = new ItemStack(Material.IRON_CHESTPLATE, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Tingz's Necklace");
+        meta.setDisplayName("§1Tingz's Necklace");
         List<String> lore = new ArrayList<>();
         lore.add("Gives you resistance 1, and speed 1 for 10 seconds on a kill.");
         meta.setLore(lore);

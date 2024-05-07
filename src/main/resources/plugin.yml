@@ -16,10 +16,19 @@ commands:
     permission: outcastsfinale.crownreset
     aliases:
       - resetcrown
+  mealreset:
+    description: Allows players to use the meal again.
+    usage: /mealreset
+    permission: outcastsfinale.mealreset
+    aliases:
+      - resetmeal
 permissions:
     outcastsfinale.pvptoggle:
         description: Allows the player to toggle PVP.
         default: op
     outcastsfinale.crownreset:
         description: Allows the player to reset the crown.
+        default: op
+    outcastsfinale.mealreset:
+        description: Allows the player to reset the meal.
         default: op

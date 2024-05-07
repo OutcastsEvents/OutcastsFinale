@@ -18,9 +18,9 @@ public class YrrahCrown {
     public static void createYrrahCrown() {
         ItemStack item = new ItemStack(Material.GOLDEN_HELMET, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("§Yrrah's Crown");
+        meta.setDisplayName("§bYrrah's Crown");
         List<String> lore = new ArrayList<>();
-        lore.add("§lA valuble item that can §krevive you once.");
+        lore.add("§lA valuble item that can §ksave you once.");
         meta.setLore(lore);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, false);
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, false);

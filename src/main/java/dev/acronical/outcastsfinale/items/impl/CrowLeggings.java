@@ -19,9 +19,9 @@ public class CrowLeggings {
     public static void createCrowLeggings() {
         ItemStack item = new ItemStack(Material.DIAMOND_LEGGINGS, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Crow's Cushioned Pants");
+        meta.setDisplayName("§5Crow's Cushioned Pants");
         List<String> lore = new ArrayList<>();
-        lore.add("Reduces fall damage, in some cases.");
+        lore.add("Makes all fall damage 3 hearts.");
         meta.setLore(lore);
         meta.addEnchant(Enchantment.LUCK, 0, false);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

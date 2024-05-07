@@ -19,7 +19,7 @@ public class WoocieHorse {
     public static void createWoocieHorse() {
         ItemStack item = new ItemStack(Material.LEATHER_HORSE_ARMOR, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Woocie's Horse");
+        meta.setDisplayName("§4Woocie's Horse");
         List<String> lore = new ArrayList<>();
         lore.add("Supplies speed 2 when holding.");
         meta.setLore(lore);

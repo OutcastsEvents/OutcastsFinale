@@ -19,9 +19,10 @@ public class RazmooseMeal {
     public static void createRazmooseMeal() {
         ItemStack item = new ItemStack(Material.COOKED_CHICKEN, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("Razmoose's Emotional Meal");
+        meta.setDisplayName("§6Razmoose's Emotional Meal");
         List<String> lore = new ArrayList<>();
         lore.add("Gives you saturation, regeneration and levitation!");
+        lore.add("§lCan only be used 5 times.");
         meta.setLore(lore);
         meta.addEnchant(Enchantment.LUCK, 3, false);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
