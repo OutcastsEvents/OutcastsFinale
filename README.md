@@ -1,7 +1,7 @@
 # Outcasts Finale by Acronical
 
 ## Info
-This is the final plugin for the Outcasts SMP Events that includes custom items from all of the Outcasters who have taken part in a previous event. Each item has a different feature and are all unique with custom crafting recipes and names. This plugin also includes a PvP toggle command that allows players to toggle PvP on and off.
+This is the final plugin for the Outcasts SMP Events that includes custom items from all of the Outcasters who have taken part in a previous event. Each item has a different feature and are all unique with custom crafting recipes and names. This plugin also includes a PvP toggle command that allows players to toggle PvP on and off. This plugin requires the [PaperMC](https://papermc.io/) server software to run.
 
 ## Commands
 - `/pvp <on/off>` - Toggles PvP on and off
