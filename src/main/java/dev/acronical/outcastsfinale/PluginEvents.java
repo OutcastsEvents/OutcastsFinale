@@ -359,7 +359,7 @@ public class PluginEvents implements Listener {
                             Player spawner = Bukkit.getPlayer(frog.getScoreboardTags().iterator().next());
                             Team team = spawner.getScoreboard().getPlayerTeam(spawner);
                             for (Player player : Bukkit.getOnlinePlayers()) {
-                                if (!(player.getName().toLowerCase().equals(frog.getScoreboardTags().iterator().next()) || team.getEntries().contains(player.getName())) && player.getGameMode().equals(GameMode.SURVIVAL)) {
+                                if (!(player.getName().toLowerCase().equals(frog.getScoreboardTags().iterator().next()) || Objects.equals(player.getScoreboard().getPlayerTeam(player), team)) && player.getGameMode().equals(GameMode.SURVIVAL)) {
                                     frog.setTarget(player);
                                     frog.setVelocity(player.getLocation().toVector().subtract(frog.getLocation().toVector()).normalize().multiply(0.5));
                                     if (frog.getLocation().distance(player.getLocation()) < 3) {
@@ -416,10 +416,10 @@ public class PluginEvents implements Listener {
         Location location = player.getLocation();
         Vector direction = location.getDirection();
         World world = player.getWorld();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             TNTPrimed tnt = (TNTPrimed) world.spawnEntity(location, EntityType.PRIMED_TNT);
             tnt.setVelocity(new Vector(direction.getX() + Math.random() * 0.5, direction.getY() + Math.random() * 0.5, direction.getZ() + Math.random() * 0.5));
-            tnt.setFuseTicks(120);
+            tnt.setFuseTicks(100);
             tnt.setCustomNameVisible(true);
             tnt.setCustomName(player.getName() + "'s TNT");
             tnt.setGlowing(true);
@@ -433,8 +433,8 @@ public class PluginEvents implements Listener {
         if (tnt.getCustomName() == null) return;
         if (!Objects.requireNonNull(tnt.getCustomName()).contains("'s TNT")) return;
         if (!(e.getEntity() instanceof Player player)) return;
-        Team team = Objects.requireNonNull(Bukkit.getPlayer(tnt.getScoreboardTags().iterator().next())).getScoreboard().getPlayerTeam(Objects.requireNonNull(Bukkit.getPlayer(tnt.getScoreboardTags().iterator().next())));
-        if (player.getScoreboard().getPlayerTeam(player) == team || player.getName().toLowerCase().equals(tnt.getScoreboardTags().iterator().next())) {
+        Team team = Bukkit.getPlayer(tnt.getScoreboardTags().iterator().next()).getScoreboard().getPlayerTeam(Objects.requireNonNull(Bukkit.getPlayer(tnt.getScoreboardTags().iterator().next())));
+        if (player.getScoreboard().getPlayerTeam(player).equals(team) || player.getName().toLowerCase().equals(tnt.getScoreboardTags().iterator().next())) {
             e.setCancelled(true);
         }
     }
@@ -453,6 +453,7 @@ public class PluginEvents implements Listener {
         player.setSaturation(20);
         Particle particle = Particle.TOTEM;
         player.spawnParticle(particle, player.getLocation(), player.getLocation().getDirection().getBlockX(), player.getLocation().getDirection().getBlockY(), player.getLocation().getDirection().getBlockZ(), 100);
+        player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1, 1);
         player.sendTitle("§l§6Saved!", "§lYou have been saved by Yrrah's Crown.", 10, 70, 20);
     }
 
