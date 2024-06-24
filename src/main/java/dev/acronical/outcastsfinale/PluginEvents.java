@@ -460,7 +460,7 @@ public class PluginEvents implements Listener {
     public BukkitTask crownCheck = Bukkit.getServer().getScheduler().runTaskTimer(OutcastsFinale.getPlugin(OutcastsFinale.class), () -> {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getInventory().getHelmet() == null) continue;
-            if (Objects.requireNonNull(player.getInventory().getHelmet().getLore()).isEmpty()) return;
+            if (Objects.requireNonNull(player.getInventory().getHelmet().getLore()).isEmpty()) continue;
             if (player.getScoreboardTags().contains("yrrahCrown")) {
                 if (player.getInventory().getHelmet().getLore().equals(YrrahCrown.yrrahCrown.getLore())) {
                     player.getInventory().setHelmet(null);
